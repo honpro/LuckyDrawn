@@ -12,7 +12,7 @@ namespace ProjectAlta.Entity
         
         public TypeCode()
         {
-            ProgramSizes = new HashSet<ProgramSize>();
+            TypeCodes = new HashSet<TypeCode>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -22,6 +22,6 @@ namespace ProjectAlta.Entity
         public string TypeCodeName { get; set; }
 
         
-        public ICollection<ProgramSize> ProgramSizes { get; set; }
+        public ICollection<TypeCode> TypeCodes { get; set; }
     }
 }
