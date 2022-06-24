@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,68 @@ namespace ProjectAlta.Repository
     public class TypeBarcodeRepository : iTypeBarcodeRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public TypeBarcodeRepository(AddContext addcon)
+        public TypeBarcodeRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
+            admap = mapper;
         }
-        public void Delete(int TypeBarcodeID)
+        
+        
+
+        public List<TypeBarcodeDTO> GetAll()
         {
-            TypeBarcode typeBarcode = addContext.TypeBarcodes.Find(TypeBarcodeID);
-            addContext.TypeBarcodes.Remove(typeBarcode);
+            var allTyBa = addContext.TypeBarcodes.ToList();
+            return admap.Map<List<TypeBarcodeDTO>>(allTyBa);
         }
 
-        public IEnumerable<TypeBarcode> GetAll()
+        public TypeBarcodeDTO GetById(int TypeBarcodeID)
         {
-            return addContext.TypeBarcodes.ToList();
+            var byid = addContext.TypeBarcodes.Find(TypeBarcodeID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<TypeBarcodeDTO>(byid);
         }
 
-        public TypeBarcode GetById(int TypeBarcodeID)
+        public bool Insert(TypeBarcodeDTO TypeBarcodeDTO)
         {
-            return addContext.TypeBarcodes.Find(TypeBarcodeID);
+            var insertTyBa = addContext.TypeBarcodes.Find(TypeBarcodeDTO.TypeBarcodeID);
+            if (insertTyBa == null)
+            {
+                addContext.TypeBarcodes.Add(admap.Map<TypeBarcode>(TypeBarcodeDTO));
+                return true;
+            }
+            return false;
         }
 
-        public void Insert(TypeBarcode TypeBarcode)
+        public bool Update(TypeBarcodeDTO TypeBarcodeDTO)
         {
-            addContext.TypeBarcodes.Add(TypeBarcode);
+            var updateTyBa = addContext.TypeBarcodes.Find(TypeBarcodeDTO.TypeBarcodeID);
+            if (updateTyBa != null)
+            {
+                addContext.TypeBarcodes.Update(admap.Map(TypeBarcodeDTO, updateTyBa));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(int TypeBarcodeID)
+        {
+            var DeleteTyBa = addContext.TypeBarcodes.Find(TypeBarcodeID);
+            if (DeleteTyBa == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteTyBa);
+            return true;
         }
 
         public void Save()
         {
             addContext.SaveChanges();
-        }
-
-        public void Update(TypeBarcode TypeBarcode)
-        {
-            addContext.Entry(TypeBarcode).State = EntityState.Modified;
         }
         private bool disposed = false;
 

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class SettingController : ControllerBase
     {
         public readonly iSettingRepository iSettingRepository;
-
-        public SettingController(AddContext addcon)
+        private IMapper admap;
+        public SettingController(iSettingRepository addcon, IMapper mapper)
         {
-            iSettingRepository = new SettingRepository(addcon);
+            iSettingRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<Setting>> Index()
+        public async Task<ActionResult<List<SettingDTO>>> getAdmin()
         {
             var model = iSettingRepository.GetAll();
+            if (model == null)
+            {
+                return new List<SettingDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddSetting(Setting model)
-        {
-            if (ModelState.IsValid)
-            {
-                iSettingRepository.Insert(model);
-                iSettingRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditSetting(Setting model)
+        public ActionResult<bool> AddSet(SettingDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iSettingRepository.Update(model);
-                iSettingRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iSettingRepository.Insert(model);
+            iSettingRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int SettingID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateSet(SettingDTO model)
         {
-            if (iSettingRepository.GetById(SettingID) != null)
-            {
-                iSettingRepository.Delete(SettingID);
-                iSettingRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iSettingRepository.Update(model);
+            iSettingRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteSet(int id)
+        {
+            var check = iSettingRepository.Delete(id);
+
+            iSettingRepository.Save();
+            return check;
+
         }
     }
 }

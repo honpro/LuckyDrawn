@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class GiftsOfCampignController : ControllerBase
     {
         public readonly iGiftsOfCampignRepository iGiftsOfCampignRepository;
-
-        public GiftsOfCampignController(AddContext addcon)
+        private IMapper admap;
+        public GiftsOfCampignController(iGiftsOfCampignRepository addcon, IMapper mapper)
         {
-            iGiftsOfCampignRepository = new GiftsOfCampignRepository(addcon);
+            iGiftsOfCampignRepository= addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<GiftsOfCampign>> Index()
+        public async Task<ActionResult<List<GiftsOfCampignDTO>>> getAdmin()
         {
             var model = iGiftsOfCampignRepository.GetAll();
+            if (model == null)
+            {
+                return new List<GiftsOfCampignDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddGiftsOfCampign(GiftsOfCampign model)
-        {
-            if (ModelState.IsValid)
-            {
-                iGiftsOfCampignRepository.Insert(model);
-                iGiftsOfCampignRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditGiftsOfCampign(GiftsOfCampign model)
+        public ActionResult<bool> AddGif(GiftsOfCampignDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iGiftsOfCampignRepository.Update(model);
-                iGiftsOfCampignRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iGiftsOfCampignRepository.Insert(model);
+            iGiftsOfCampignRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int GiftsOfCampignID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateGif(GiftsOfCampignDTO model)
         {
-            if (iGiftsOfCampignRepository.GetById(GiftsOfCampignID) != null)
-            {
-                iGiftsOfCampignRepository.Delete(GiftsOfCampignID);
-                iGiftsOfCampignRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iGiftsOfCampignRepository.Update(model);
+            iGiftsOfCampignRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteGif(int id)
+        {
+            var check = iGiftsOfCampignRepository.Delete(id);
+
+            iGiftsOfCampignRepository.Save();
+            return check;
+
         }
     }
 }

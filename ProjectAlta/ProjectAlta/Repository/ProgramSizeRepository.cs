@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,66 @@ namespace ProjectAlta.Repository
     public class ProgramSizeRepository : iProgramSizeRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public ProgramSizeRepository(AddContext addcon)
+        public ProgramSizeRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
-        }
-        public void Delete(int ProgramSizeID)
-        {
-           ProgramSize programSize = addContext.ProgramSizes.Find(ProgramSizeID);
-            addContext.ProgramSizes.Remove(programSize);
+            admap = mapper;
         }
 
-        public IEnumerable<ProgramSize> GetAll()
+        public bool Delete(int ProgramSizeID)
         {
-            return addContext.ProgramSizes.ToList();
+            var DeletePro = addContext.ProgramSizes.Find(ProgramSizeID);
+            if (DeletePro == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeletePro);
+            return true;
         }
 
-        public ProgramSize GetById(int ProgramSizeID)
+        public List<ProgramSizeDTO> GetAll()
         {
-            return addContext.ProgramSizes.Find(ProgramSizeID);
+            var allPro = addContext.ProgramSizes.ToList();
+            return admap.Map<List<ProgramSizeDTO>>(allPro);
         }
 
-        public void Insert(ProgramSize ProgramSize)
+        public ProgramSizeDTO GetById(int ProgramSizeID)
         {
-            addContext.ProgramSizes.Add(ProgramSize);
+            var byid = addContext.ProgramSizes.Find(ProgramSizeID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<ProgramSizeDTO>(byid);
+        }
+
+        public bool Insert(ProgramSizeDTO ProgramSizeDTO)
+        {
+            var insertPro = addContext.ProgramSizes.Find(ProgramSizeDTO.ProgramSizeID);
+            if (insertPro == null)
+            {
+                addContext.ProgramSizes.Add(admap.Map<ProgramSize>(ProgramSizeDTO));
+                return true;
+            }
+            return false;
         }
 
         public void Save()
         {
-           addContext.SaveChanges();
+            addContext.SaveChanges();
         }
 
-        public void Update(ProgramSize ProgramSize)
+        public bool Update(ProgramSizeDTO ProgramSizeDTO)
         {
-            addContext.Entry(ProgramSize).State = EntityState.Modified;
+            var updatePro = addContext.ProgramSizes.Find(ProgramSizeDTO.ProgramSizeID);
+            if (updatePro != null)
+            {
+                addContext.ProgramSizes.Update(admap.Map(ProgramSizeDTO, updatePro));
+                return true;
+            }
+            return false;
         }
         private bool disposed = false;
 

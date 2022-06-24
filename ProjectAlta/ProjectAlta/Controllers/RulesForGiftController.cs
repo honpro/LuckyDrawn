@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class RulesForGiftController : ControllerBase
     {
         public readonly iRulesForGiftRepository iRulesForGiftRepository;
-
-        public RulesForGiftController(AddContext addcon)
+        private IMapper admap;
+        public RulesForGiftController(iRulesForGiftRepository addcon, IMapper mapper)
         {
-            iRulesForGiftRepository = new RulesForGiftRepository(addcon);
+            iRulesForGiftRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<RulesForGift>> Index()
+        public async Task<ActionResult<List<RulesForGiftDTO>>> getAdmin()
         {
             var model = iRulesForGiftRepository.GetAll();
+            if (model == null)
+            {
+                return new List<RulesForGiftDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddRulesForGift(RulesForGift model)
-        {
-            if (ModelState.IsValid)
-            {
-                iRulesForGiftRepository.Insert(model);
-                iRulesForGiftRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditRulesForGift(RulesForGift model)
+        public ActionResult<bool> AddRu(RulesForGiftDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iRulesForGiftRepository.Update(model);
-                iRulesForGiftRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iRulesForGiftRepository.Insert(model);
+            iRulesForGiftRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int RulesForGiftID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateRu(RulesForGiftDTO model)
         {
-            if (iRulesForGiftRepository.GetById(RulesForGiftID) != null)
-            {
-                iRulesForGiftRepository.Delete(RulesForGiftID);
-                iRulesForGiftRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iRulesForGiftRepository.Update(model);
+            iRulesForGiftRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteRu(int id)
+        {
+            var check = iRulesForGiftRepository.Delete(id);
+
+            iRulesForGiftRepository.Save();
+            return check;
+
         }
     }
 }

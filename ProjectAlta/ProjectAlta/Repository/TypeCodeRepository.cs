@@ -1,35 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 
 namespace ProjectAlta.Repository
 {
     public class TypeCodeRepository : iTypeCodeRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public TypeCodeRepository(AddContext addcon)
+        public TypeCodeRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
+            admap = mapper;
         }
 
-        public void Delete(int TypeCodeID)
+        public bool Delete(int TypeCodeID)
         {
-           var  typeCode = addContext.TypeCodes.Find(TypeCodeID);
+            var DeleteTyBa = addContext.TypeCodes.Find(TypeCodeID);
+            if (DeleteTyBa == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteTyBa);
+            return true;
         }
 
-        public IEnumerable<Entity.TypeCode> GetAll()
+        public List<TypeCodeDTO> GetAll()
         {
-           return addContext.TypeCodes.ToList();
+            var allTyBa = addContext.TypeCodes.ToList();
+            return admap.Map<List<TypeCodeDTO>>(allTyBa);
         }
 
-        public Entity.TypeCode GetById(int TypeCodeID)
+        public TypeCodeDTO GetById(int TypeCodeID)
         {
-            return addContext.TypeCodes.Find(TypeCodeID);
+            var byid = addContext.TypeCodes.Find(TypeCodeID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<TypeCodeDTO>(byid);
         }
 
-        public void Insert(Entity.TypeCode TypeCode)
+        public bool Insert(TypeCodeDTO TypeCodeDTO)
         {
-            addContext.TypeCodes.Add(TypeCode);
+            var insertTyBa = addContext.TypeCodes.Find(TypeCodeDTO.TypeCodeID);
+            if (insertTyBa == null)
+            {
+                addContext.TypeCodes.Add(admap.Map<Entity.TypeCode>(TypeCodeDTO));
+                return true;
+            }
+            return false;
         }
 
         public void Save()
@@ -37,9 +59,35 @@ namespace ProjectAlta.Repository
             addContext.SaveChanges();
         }
 
-        public void Update(Entity.TypeCode TypeCode)
+        public bool Update(TypeCodeDTO TypeCodeDTO)
         {
-            ;
+            var updateTyBa = addContext.TypeCodes.Find(TypeCodeDTO.TypeCodeID);
+            if (updateTyBa != null)
+            {
+                addContext.TypeCodes.Update(admap.Map(TypeCodeDTO, updateTyBa));
+                return true;
+            }
+            return false;
+        }
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    addContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
     }
 }

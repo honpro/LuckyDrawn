@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class ProgramSizeController : ControllerBase
     {
         public readonly iProgramSizeRepository iProgramSizeRepository;
-
-        public ProgramSizeController(AddContext addcon)
+        private IMapper admap;
+        public ProgramSizeController(iProgramSizeRepository addcon, IMapper mapper)
         {
-            iProgramSizeRepository = new ProgramSizeRepository(addcon);
+            iProgramSizeRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<ProgramSize>> Index()
+        public async Task<ActionResult<List<ProgramSizeDTO>>> getAdmin()
         {
             var model = iProgramSizeRepository.GetAll();
+            if (model == null)
+            {
+                return new List<ProgramSizeDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddProgramSize(ProgramSize model)
-        {
-            if (ModelState.IsValid)
-            {
-                iProgramSizeRepository.Insert(model);
-                iProgramSizeRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditProgramSize(ProgramSize model)
+        public ActionResult<bool> AddPro(ProgramSizeDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iProgramSizeRepository.Update(model);
-                iProgramSizeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iProgramSizeRepository.Insert(model);
+            iProgramSizeRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int ProgramSizeID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdatePro(ProgramSizeDTO model)
         {
-            if (iProgramSizeRepository.GetById(ProgramSizeID) != null)
-            {
-                iProgramSizeRepository.Delete(ProgramSizeID);
-                iProgramSizeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iProgramSizeRepository.Update(model);
+            iProgramSizeRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeletePro(int id)
+        {
+            var check = iProgramSizeRepository.Delete(id);
+
+            iProgramSizeRepository.Save();
+            return check;
+
         }
     }
 }

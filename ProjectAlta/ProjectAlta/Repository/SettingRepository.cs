@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,68 @@ namespace ProjectAlta.Repository
     public class SettingRepository : iSettingRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public SettingRepository(AddContext addcon)
+        public SettingRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
-        }
-        public void Delete(int SettingID)
-        {
-            Setting setting = addContext.Settings.Find(SettingID);
-            addContext.Settings.Remove(setting);
+            admap = mapper;
         }
 
-        public IEnumerable<Setting> GetAll()
+        
+
+        public List<SettingDTO> GetAll()
         {
-            return addContext.Settings.ToList() ;
+            var allSet = addContext.Settings.ToList();
+            return admap.Map<List<SettingDTO>>(allSet);
         }
 
-        public Setting GetById(int SettingID)
+        public SettingDTO GetById(int SettingID)
         {
-            return addContext.Settings.Find(SettingID);
+            var byid = addContext.Settings.Find(SettingID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<SettingDTO>(byid);
         }
 
-        public void Insert(Setting Setting)
+        public bool Insert(SettingDTO SettingDTO)
         {
-            addContext.Settings.Add(Setting);
+            var insertSet = addContext.Settings.Find(SettingDTO.SettingID);
+            if (insertSet == null)
+            {
+                addContext.Settings.Add(admap.Map<Setting>(SettingDTO));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Update(SettingDTO SettingDTO)
+        {
+            var updateSet = addContext.Settings.Find(SettingDTO.SettingID);
+            if (updateSet != null)
+            {
+                addContext.Settings.Update(admap.Map(SettingDTO, updateSet));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(int SettingID)
+        {
+            var DeleteSet = addContext.Settings.Find(SettingID);
+            if (DeleteSet == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteSet);
+            return true;
         }
 
         public void Save()
         {
             addContext.SaveChanges();
-        }
-
-        public void Update(Setting Setting)
-        {
-            addContext.Entry(Setting).State = EntityState.Modified;
         }
         private bool disposed = false;
 

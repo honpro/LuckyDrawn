@@ -1,15 +1,16 @@
 ﻿
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iTypeCodeRepository
     {
-        IEnumerable<Entity.TypeCode> GetAll();
-        Entity.TypeCode GetById(int TypeCodeID);
-        void Insert(Entity.TypeCode TypeCode);
-        void Update(Entity.TypeCode TypeCode);
-        void Delete(int TypeCodeID);
+        List<TypeCodeDTO> GetAll();
+        TypeCodeDTO GetById(int TypeCodeID);
+        bool Insert(TypeCodeDTO TypeCodeDTO);
+        bool Update(TypeCodeDTO TypeCodeDTO);
+        bool Delete(int TypeCodeID);
         void Save();
     }
 }

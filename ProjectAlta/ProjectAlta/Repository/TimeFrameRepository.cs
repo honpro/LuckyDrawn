@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,68 @@ namespace ProjectAlta.Repository
     public class TimeFrameRepository : iTimeFrameRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public TimeFrameRepository(AddContext addcon)
+        public TimeFrameRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
+            admap = mapper;
         }
-        public void Delete(int TimeFrameID)
+       
+        
+
+        public List<TimeFrameDTO> GetAll()
         {
-            TimeFrame timeFrame = addContext.TimeFrames.Find(TimeFrameID);
-            addContext.TimeFrames.Remove(timeFrame);
+            var allTim = addContext.TimeFrames.ToList();
+            return admap.Map<List<TimeFrameDTO>>(allTim);
         }
 
-        public IEnumerable<TimeFrame> GetAll()
+        public TimeFrameDTO GetById(int TimeFrameID)
         {
-            return addContext.TimeFrames.ToList();
+            var byid = addContext.TimeFrames.Find(TimeFrameID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<TimeFrameDTO>(byid);
         }
 
-        public TimeFrame GetById(int TimeFrameID)
+        public bool Insert(TimeFrameDTO TimeFrameDTO)
         {
-            return addContext.TimeFrames.Find(TimeFrameID);
+            var insertTim = addContext.TimeFrames.Find(TimeFrameDTO.TimeFrameID);
+            if (insertTim == null)
+            {
+                addContext.TimeFrames.Add(admap.Map<TimeFrame>(TimeFrameDTO));
+                return true;
+            }
+            return false;
         }
 
-        public void Insert(TimeFrame TimeFrame)
+        public bool Update(TimeFrameDTO TimeFrameDTO)
         {
-           addContext.TimeFrames.Add(TimeFrame);
+            var updateTim = addContext.TimeFrames.Find(TimeFrameDTO.TimeFrameID);
+            if (updateTim != null)
+            {
+                addContext.TimeFrames.Update(admap.Map(TimeFrameDTO, updateTim));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(int TimeFrameID)
+        {
+            var DeleteTim = addContext.TimeFrames.Find(TimeFrameID);
+            if (DeleteTim == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteTim);
+            return true;
         }
 
         public void Save()
         {
             addContext.SaveChanges();
-        }
-
-        public void Update(TimeFrame TimeFrame)
-        {
-            addContext.Entry(TimeFrame).State = EntityState.Modified;
         }
         private bool disposed = false;
 

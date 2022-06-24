@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class TimeFrameController : ControllerBase
     {
         public readonly iTimeFrameRepository iTimeFrameRepository;
-
-        public TimeFrameController(AddContext addcon)
+        private IMapper admap;
+        public TimeFrameController(iTimeFrameRepository addcon, IMapper mapper)
         {
-            iTimeFrameRepository = new TimeFrameRepository(addcon);
+            iTimeFrameRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<TimeFrame>> Index()
+        public async Task<ActionResult<List<TimeFrameDTO>>> getAdmin()
         {
             var model = iTimeFrameRepository.GetAll();
+            if (model == null)
+            {
+                return new List<TimeFrameDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddTimeFrame(TimeFrame model)
-        {
-            if (ModelState.IsValid)
-            {
-                iTimeFrameRepository.Insert(model);
-                iTimeFrameRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditTimeFrame(TimeFrame model)
+        public ActionResult<bool> AddTim(TimeFrameDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iTimeFrameRepository.Update(model);
-                iTimeFrameRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iTimeFrameRepository.Insert(model);
+            iTimeFrameRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int TimeFrameID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateTim(TimeFrameDTO model)
         {
-            if (iTimeFrameRepository.GetById(TimeFrameID) != null)
-            {
-                iTimeFrameRepository.Delete(TimeFrameID);
-                iTimeFrameRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iTimeFrameRepository.Update(model);
+            iTimeFrameRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteTim(int id)
+        {
+            var check = iTimeFrameRepository.Delete(id);
+
+            iTimeFrameRepository.Save();
+            return check;
+
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class TypeBarcodeController : ControllerBase
     {
         public readonly iTypeBarcodeRepository iTypeBarcodeRepository;
-
-        public TypeBarcodeController(AddContext addcon)
+        private IMapper admap;
+        public TypeBarcodeController(iTypeBarcodeRepository addcon, IMapper mapper)
         {
-            iTypeBarcodeRepository = new TypeBarcodeRepository(addcon);
+            iTypeBarcodeRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<TypeBarcode>> Index()
+        public async Task<ActionResult<List<TypeBarcodeDTO>>> getAdmin()
         {
             var model = iTypeBarcodeRepository.GetAll();
+            if (model == null)
+            {
+                return new List<TypeBarcodeDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddTypeBarcode(TypeBarcode model)
-        {
-            if (ModelState.IsValid)
-            {
-                iTypeBarcodeRepository.Insert(model);
-                iTypeBarcodeRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditTypeBarcode(TypeBarcode model)
+        public ActionResult<bool> AddTyBa(TypeBarcodeDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iTypeBarcodeRepository.Update(model);
-                iTypeBarcodeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iTypeBarcodeRepository.Insert(model);
+            iTypeBarcodeRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int TypeBarcodeID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateTyBa(TypeBarcodeDTO model)
         {
-            if (iTypeBarcodeRepository.GetById(TypeBarcodeID) != null)
-            {
-                iTypeBarcodeRepository.Delete(TypeBarcodeID);
-                iTypeBarcodeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iTypeBarcodeRepository.Update(model);
+            iTypeBarcodeRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteTyBa(int id)
+        {
+            var check = iTypeBarcodeRepository.Delete(id);
+
+            iTypeBarcodeRepository.Save();
+            return check;
+
         }
     }
 }

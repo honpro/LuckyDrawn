@@ -25,6 +25,18 @@ namespace ProjectAlta.Mapper
             this.CreateMap<Gift, GiftDTO>();
             this.CreateMap<GiftsOfCampignDTO, GiftsOfCampign>();
             this.CreateMap<GiftsOfCampign, GiftsOfCampignDTO>();
+            this.CreateMap<ProgramSizeDTO, ProgramSize>();
+            this.CreateMap<ProgramSize, ProgramSizeDTO>();
+            this.CreateMap<RulesForGiftDTO, RulesForGift>();
+            this.CreateMap<RulesForGift, RulesForGiftDTO>();
+            this.CreateMap<SettingDTO, Setting>();
+            this.CreateMap<Setting, SettingDTO>();  
+            this.CreateMap<TimeFrameDTO, TimeFrame>();
+            this.CreateMap<TimeFrame, TimeFrameDTO>();
+            this.CreateMap<TypeBarcodeDTO, TypeBarcode>();
+            this.CreateMap<TypeBarcode, TypeBarcodeDTO>();
+            this.CreateMap<TypeCodeDTO, Entity.TypeCode >();
+            this.CreateMap<Entity.TypeCode, TypeCodeDTO>();
         }
     }
 }

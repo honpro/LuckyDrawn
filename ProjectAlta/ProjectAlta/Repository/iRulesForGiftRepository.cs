@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iRulesForGiftRepository
     {
-        IEnumerable<RulesForGift> GetAll();
-        RulesForGift GetById(int RulesForGiftID);
-        void Insert(RulesForGift RulesForGift);
-        void Update(RulesForGift RulesForGift);
-        void Delete(int RulesForGiftID);
+       List<RulesForGiftDTO> GetAll();
+        RulesForGiftDTO GetById(int RulesForGiftID);
+        bool Insert(RulesForGiftDTO RulesForGiftDTO);
+        bool Update(RulesForGiftDTO RulesForGiftDTO);
+        bool Delete(int RulesForGiftID);
         void Save();
     }
 }

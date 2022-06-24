@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iTimeFrameRepository
     {
-        IEnumerable<TimeFrame> GetAll();
-        TimeFrame GetById(int TimeFrameID);
-        void Insert(TimeFrame TimeFrame);
-        void Update(TimeFrame TimeFrame);
-        void Delete(int TimeFrameID);
+        List<TimeFrameDTO> GetAll();
+        TimeFrameDTO GetById(int TimeFrameID);
+        bool Insert(TimeFrameDTO TimeFrameDTO);
+        bool Update(TimeFrameDTO TimeFrameDTO);
+        bool Delete(int TimeFrameID);
         void Save();
     }
 }

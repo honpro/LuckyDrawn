@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,67 @@ namespace ProjectAlta.Repository
     public class RulesForGiftRepository : iRulesForGiftRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public RulesForGiftRepository(AddContext addcon)
+        public RulesForGiftRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
+            admap = mapper;
         }
-        public void Delete(int RulesForGiftID)
+        
+        
+        public List<RulesForGiftDTO> GetAll()
         {
-           RulesForGift rulesForGift = addContext.RulesForGifts.Find(RulesForGiftID);
-            addContext.RulesForGifts.Remove(rulesForGift);
-        }
-
-        public IEnumerable<RulesForGift> GetAll()
-        {
-            return addContext.RulesForGifts.ToList();
+            var allRu = addContext.RulesForGifts.ToList();
+            return admap.Map<List<RulesForGiftDTO>>(allRu);
         }
 
-        public RulesForGift GetById(int RulesForGiftID)
+        public RulesForGiftDTO GetById(int RulesForGiftID)
         {
-            return addContext.RulesForGifts.Find(RulesForGiftID);
+            var byid = addContext.RulesForGifts.Find(RulesForGiftID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<RulesForGiftDTO>(byid);
         }
 
-        public void Insert(RulesForGift RulesForGift)
+        public bool Insert(RulesForGiftDTO RulesForGiftDTO)
         {
-            addContext.RulesForGifts.Add(RulesForGift);
+            var insertRu = addContext.RulesForGifts.Find(RulesForGiftDTO.RulesForGiftsID);
+            if (insertRu == null)
+            {
+                addContext.RulesForGifts.Add(admap.Map<RulesForGift>(RulesForGiftDTO));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Update(RulesForGiftDTO RulesForGiftDTO)
+        {
+            var updateRu = addContext.RulesForGifts.Find(RulesForGiftDTO.RulesForGiftsID);
+            if (updateRu != null)
+            {
+                addContext.RulesForGifts.Update(admap.Map(RulesForGiftDTO, updateRu));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(int RulesForGiftID)
+        {
+            var DeleteRu = addContext.RulesForGifts.Find(RulesForGiftID);
+            if (DeleteRu == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteRu);
+            return true;
         }
 
         public void Save()
         {
             addContext.SaveChanges();
-        }
-
-        public void Update(RulesForGift RulesForGift)
-        {
-            addContext.Entry(RulesForGift).State = EntityState.Modified;
         }
         private bool disposed = false;
 
@@ -62,5 +91,6 @@ namespace ProjectAlta.Repository
 
             GC.SuppressFinalize(this);
         }
+
     }
 }

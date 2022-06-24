@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iSettingRepository
     {
-        IEnumerable<Setting> GetAll();
-        Setting GetById(int SettingID);
-        void Insert(Setting Setting);
-        void Update(Setting Setting);
-        void Delete(int SettingID);
+        List<SettingDTO> GetAll();
+        SettingDTO GetById(int SettingID);
+        bool Insert(SettingDTO SettingDTO);
+        bool Update(SettingDTO SettingDTO);
+        bool Delete(int SettingID);
         void Save();
     }
 }
