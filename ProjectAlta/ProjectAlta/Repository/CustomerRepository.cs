@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,30 +9,50 @@ namespace ProjectAlta.Repository
     public class CustomerRepository : iCustomerRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public CustomerRepository(AddContext addcon)
+        public CustomerRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
-        }
-        public void Delete(int CustomerID)
-        {
-           Customer customer = addContext.Customers.Find(CustomerID);
-            addContext.Customers.Remove(customer);
+            admap = mapper;
         }
 
-        public IEnumerable<Customer> GetAll()
+        public bool Delete(int CustomerID)
         {
-           return addContext.Customers.ToList();
+            var DeleteCus = addContext.Customers.Find(CustomerID);
+            if (DeleteCus == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteCus);
+            return true;
         }
 
-        public Customer GetById(int CustomerID)
+        public List<CustomerDTO> GetAll()
         {
-          return  addContext.Customers.Find(CustomerID);
+            var allCus = addContext.Customers.ToList();
+            return admap.Map<List<CustomerDTO>>(allCus);
         }
 
-        public void Insert(Customer Customer)
+        public CustomerDTO GetById(int CustomerID)
         {
-            addContext.Customers.Add(Customer);
+            var byid = addContext.Customers.Find(CustomerID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<CustomerDTO>(byid);
+        }
+
+        public bool Insert(CustomerDTO CustomerDTO)
+        {
+            var insertCus = addContext.Customers.Find(CustomerDTO.CustomerID);
+            if (insertCus == null)
+            {
+                addContext.Customers.Add(admap.Map<Customer>(CustomerDTO));
+                return true;
+            }
+            return false;
         }
 
         public void Save()
@@ -38,9 +60,15 @@ namespace ProjectAlta.Repository
             addContext.SaveChanges();
         }
 
-        public void Update(Customer Customer)
+        public bool Update(CustomerDTO CustomerDTO)
         {
-            addContext.Entry(Customer).State = EntityState.Modified;
+            var updateCus = addContext.Customers.Find(CustomerDTO.CustomerID);
+            if (updateCus != null)
+            {
+                addContext.Customers.Update(admap.Map(CustomerDTO, updateCus));
+                return true;
+            }
+            return false;
         }
         private bool disposed = false;
 

@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iGiftRepository
     {
-        IEnumerable<Gift> GetAll();
-        Gift GetById(int GiftID);
-        void Insert(Gift Gift);
-        void Update(Gift Gift);
-        void Delete(int GiftID);
+        List<GiftDTO> GetAll();
+        GiftDTO GetById(int GiftID);
+        bool Insert(GiftDTO GiftDTO);
+        bool Update(GiftDTO GiftDTO);
+        bool Delete(int GiftID);
         void Save();
     }
 }

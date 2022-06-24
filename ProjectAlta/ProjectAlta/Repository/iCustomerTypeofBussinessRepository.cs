@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iCustomerTypeofBussinessRepository
     {
-        IEnumerable<CustomerTypeofBussiness> GetAll();
-        CustomerTypeofBussiness GetById(int CustomerTypeofBussinessID);
-        void Insert(CustomerTypeofBussiness CustomerTypeofBussiness);
-        void Update(CustomerTypeofBussiness CustomerTypeofBussiness);
-        void Delete(int CustomerTypeofBussinessID);
+        List<CustomerTypeofBussinessDTO> GetAll();
+        CustomerTypeofBussinessDTO GetById(int CustomerTypeofBussinessID);
+        bool Insert(CustomerTypeofBussinessDTO CustomerTypeofBussinessDTO);
+        bool Update(CustomerTypeofBussinessDTO CustomerTypeofBussinessDTO);
+        bool Delete(int CustomerTypeofBussinessID);
         void Save();
     }
 }

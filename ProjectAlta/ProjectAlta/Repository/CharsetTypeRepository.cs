@@ -25,7 +25,7 @@ namespace ProjectAlta.Repository
                 return false;
             }
             addContext.Remove(DeleteCha);
-            return true; ;
+            return true; 
         }
 
         public List<CharsetTypeDTO> GetAll()

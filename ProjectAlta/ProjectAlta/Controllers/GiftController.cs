@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class GiftController : ControllerBase
     {
         public readonly iGiftRepository iGiftRepository;
-
-        public GiftController(AddContext addcon)
+        private IMapper admap;
+        public GiftController(iGiftRepository addcon, IMapper mapper)
         {
-            iGiftRepository = new GiftRepository(addcon);
+            iGiftRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<Gift>> Index()
+        public async Task<ActionResult<List<GiftDTO>>> getAdmin()
         {
             var model = iGiftRepository.GetAll();
+            if (model == null)
+            {
+                return new List<GiftDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddGift(Gift model)
-        {
-            if (ModelState.IsValid)
-            {
-                iGiftRepository.Insert(model);
-                iGiftRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditGift(Gift model)
+        public ActionResult<bool> AddGif(GiftDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iGiftRepository.Update(model);
-                iGiftRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iGiftRepository.Insert(model);
+            iGiftRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int GiftID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateGif(GiftDTO model)
         {
-            if (iGiftRepository.GetById(GiftID) != null)
-            {
-                iGiftRepository.Delete(GiftID);
-                iGiftRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iGiftRepository.Update(model);
+            iGiftRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteGif(int id)
+        {
+            var check = iGiftRepository.Delete(id);
+
+            iGiftRepository.Save();
+            return check;
+
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,51 @@ namespace ProjectAlta.Controllers
     public class CustomerTypeofBussinessController : ControllerBase
     {
         public readonly iCustomerTypeofBussinessRepository iCustomerTypeofBussinessRepository;
-
-        public CustomerTypeofBussinessController(AddContext addcon)
+        private IMapper admap;
+      public CustomerTypeofBussinessController(iCustomerTypeofBussinessRepository addcon, IMapper mapper)
         {
-            iCustomerTypeofBussinessRepository = new CustomerTypeofBussinessRepository(addcon);
+            iCustomerTypeofBussinessRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<CustomerTypeofBussiness>> Index()
+        public async Task<ActionResult<List<CustomerTypeofBussinessDTO>>> getAdmin()
         {
             var model = iCustomerTypeofBussinessRepository.GetAll();
+            if (model == null)
+            {
+                return new List<CustomerTypeofBussinessDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddCustomerTypeofBussiness(CustomerTypeofBussiness model)
-        {
-            if (ModelState.IsValid)
-            {
-                iCustomerTypeofBussinessRepository.Insert(model);
-                iCustomerTypeofBussinessRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditCustomerTypeofBussiness(CustomerTypeofBussiness model)
+        public ActionResult<bool> AddCus(CustomerTypeofBussinessDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iCustomerTypeofBussinessRepository.Update(model);
-                iCustomerTypeofBussinessRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerTypeofBussinessRepository.Insert(model);
+            iCustomerTypeofBussinessRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int CustomerTypeofBussinessID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateCus(CustomerTypeofBussinessDTO model)
         {
-            if (iCustomerTypeofBussinessRepository.GetById(CustomerTypeofBussinessID) != null)
-            {
-                iCustomerTypeofBussinessRepository.Delete(CustomerTypeofBussinessID);
-                iCustomerTypeofBussinessRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerTypeofBussinessRepository.Update(model);
+            iCustomerTypeofBussinessRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteCus(int id)
+        {
+            var check = iCustomerTypeofBussinessRepository.Delete(id);
+
+            iCustomerTypeofBussinessRepository.Save();
+            return check;
+
         }
     }
 }

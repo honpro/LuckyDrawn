@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,53 @@ namespace ProjectAlta.Controllers
     public class CustomerController : ControllerBase
     {
         public readonly iCustomerRepository iCustomerRepository;
+        private IMapper admap;
 
-        public CustomerController(AddContext addcon)
+
+        public CustomerController(iCustomerRepository addcon, IMapper mapper)
         {
-            iCustomerRepository = new CustomerRepository(addcon);
+            iCustomerRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<Customer>> Index()
+        public async Task<ActionResult<List<CustomerDTO>>> getAdmin()
         {
             var model = iCustomerRepository.GetAll();
+            if (model == null)
+            {
+                return new List<CustomerDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddCustomer(Customer model)
-        {
-            if (ModelState.IsValid)
-            {
-                iCustomerRepository.Insert(model);
-                iCustomerRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditCustomer(Customer model)
+        public ActionResult<bool> AddCus(CustomerDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iCustomerRepository.Update(model);
-                iCustomerRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerRepository.Insert(model);
+            iCustomerRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int CustomerID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateCus(CustomerDTO model)
         {
-            if (iCustomerRepository.GetById(CustomerID) != null)
-            {
-                iCustomerRepository.Delete(CustomerID);
-                iCustomerRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerRepository.Update(model);
+            iCustomerRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteCus(int id)
+        {
+            var check = iCustomerRepository.Delete(id);
+
+            iCustomerRepository.Save();
+            return check;
+
         }
     }
 }

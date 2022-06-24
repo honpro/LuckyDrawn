@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,40 +9,66 @@ namespace ProjectAlta.Repository
     public class CustomerTypeRepository : iCustomerTypeRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public CustomerTypeRepository(AddContext addcon)
+        public CustomerTypeRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
-        }
-        public void Delete(int CustomerTypeID)
-        {
-            CustomerType customerType = addContext.CustomerTypes.Find(CustomerTypeID);
-            addContext.CustomerTypes.Remove(customerType);
+            admap = mapper;
         }
 
-        public IEnumerable<CustomerType> GetAll()
+        public List<CustomerPypeDTO> GetAll()
         {
-            return addContext.CustomerTypes.ToList();
+            var allCus = addContext.CustomerTypes.ToList();
+            return admap.Map<List<CustomerPypeDTO>>(allCus);
         }
 
-        public CustomerType GetById(int CustomerTypeID)
+        public CustomerPypeDTO GetById(int CustomerTypeID)
         {
-            return addContext.CustomerTypes.Find(CustomerTypeID);
+            var byid = addContext.CustomerTypes.Find(CustomerTypeID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<CustomerPypeDTO>(byid);
         }
 
-        public void Insert(CustomerType CustomerType)
+        public bool Insert(CustomerPypeDTO CustomerTypeDTO)
         {
-            addContext.CustomerTypes.Add(CustomerType);
+            var insertCus = addContext.CustomerTypes.Find(CustomerTypeDTO.CustomerPypeID);
+            if (insertCus == null)
+            {
+                addContext.CustomerTypes.Add(admap.Map<CustomerType>(CustomerTypeDTO));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Update(CustomerPypeDTO CustomerTypeDTO)
+        {
+            var updateCus = addContext.CustomerTypes.Find(CustomerTypeDTO.CustomerPypeID);
+            if (updateCus != null)
+            {
+                addContext.CustomerTypes.Update(admap.Map(CustomerTypeDTO, updateCus));
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(int CustomerTypeID)
+        {
+            var DeleteCus = addContext.CustomerTypes.Find(CustomerTypeID);
+            if (DeleteCus == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteCus);
+            return true;
         }
 
         public void Save()
         {
             addContext.SaveChanges();
-        }
-
-        public void Update(CustomerType CustomerType)
-        {
-            addContext.Entry(CustomerType).State = EntityState.Modified;
         }
         private bool disposed = false;
 
@@ -62,5 +90,6 @@ namespace ProjectAlta.Repository
 
             GC.SuppressFinalize(this);
         }
+
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 using ProjectAlta.Repository;
 
@@ -11,56 +13,53 @@ namespace ProjectAlta.Controllers
     public class CustomerTypeController : ControllerBase
     {
         public readonly iCustomerTypeRepository iCustomerTypeRepository;
+        private IMapper admap;
 
-        public CustomerTypeController(AddContext addcon)
+
+        public CustomerTypeController(iCustomerTypeRepository addcon, IMapper mapper)
         {
-            iCustomerTypeRepository = new CustomerTypeRepository(addcon);
+            iCustomerTypeRepository = addcon;
+            admap = mapper;
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<CustomerType>> Index()
+        public async Task<ActionResult<List<CustomerPypeDTO>>> getAdmin()
         {
             var model = iCustomerTypeRepository.GetAll();
+            if (model == null)
+            {
+                return new List<CustomerPypeDTO>();
+            }
             return model.ToList();
         }
 
-        [HttpPost]
-        public void AddCustomerType(CustomerType model)
-        {
-            if (ModelState.IsValid)
-            {
-                iCustomerTypeRepository.Insert(model);
-                iCustomerTypeRepository.Save();
-            }
-        }
 
         [HttpPost]
-        public ActionResult<bool> EditCustomerType(CustomerType model)
+        public ActionResult<bool> AddCus(CustomerPypeDTO model)
         {
-            if (ModelState.IsValid)
-            {
-                iCustomerTypeRepository.Update(model);
-                iCustomerTypeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerTypeRepository.Insert(model);
+            iCustomerTypeRepository.Save();
+            return check;
+
         }
 
-        [HttpPost]
-        public ActionResult<bool> Delete(int CustomerTypeID)
+
+        [HttpPut]
+        public ActionResult<bool> UpdateCus(CustomerPypeDTO model)
         {
-            if (iCustomerTypeRepository.GetById(CustomerTypeID) != null)
-            {
-                iCustomerTypeRepository.Delete(CustomerTypeID);
-                iCustomerTypeRepository.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var check = iCustomerTypeRepository.Update(model);
+            iCustomerTypeRepository.Save();
+            return check;
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult<bool> DeleteCus(int id)
+        {
+            var check = iCustomerTypeRepository.Delete(id);
+
+            iCustomerTypeRepository.Save();
+            return check;
+
         }
     }
 }

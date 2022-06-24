@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectAlta.Context;
+using ProjectAlta.DTO;
 using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
@@ -7,30 +9,50 @@ namespace ProjectAlta.Repository
     public class CustomerTypeofBussinessRepository : iCustomerTypeofBussinessRepository
     {
         private readonly AddContext addContext;
+        private readonly IMapper admap;
 
-        public CustomerTypeofBussinessRepository(AddContext addcon)
+        public CustomerTypeofBussinessRepository(AddContext addcon, IMapper mapper)
         {
             addContext = addcon;
-        }
-        public void Delete(int CustomerTypeofBussinessID)
-        {
-            CustomerTypeofBussiness customerTypeofBussiness = addContext.CustomerTypeofBussinesses.Find(CustomerTypeofBussinessID);
-            addContext.CustomerTypeofBussinesses.Remove(customerTypeofBussiness);
+            admap = mapper;
         }
 
-        public IEnumerable<CustomerTypeofBussiness> GetAll()
+        public bool Delete(int CustomerTypeofBussinessID)
         {
-            return addContext.CustomerTypeofBussinesses.ToList();
+            var DeleteCus = addContext.CustomerTypeofBussinesses.Find(CustomerTypeofBussinessID);
+            if (DeleteCus == null)
+            {
+                return false;
+            }
+            addContext.Remove(DeleteCus);
+            return true;
         }
 
-        public CustomerTypeofBussiness GetById(int CustomerTypeofBussinessID)
+        public List<CustomerTypeofBussinessDTO> GetAll()
         {
-            return addContext.CustomerTypeofBussinesses.Find(CustomerTypeofBussinessID);
+            var allCus = addContext.CustomerTypeofBussinesses.ToList();
+            return admap.Map<List<CustomerTypeofBussinessDTO>>(allCus);
         }
 
-        public void Insert(CustomerTypeofBussiness CustomerTypeofBussiness)
+        public CustomerTypeofBussinessDTO GetById(int CustomerTypeofBussinessID)
         {
-             addContext.CustomerTypeofBussinesses.Add(CustomerTypeofBussiness);
+            var byid = addContext.CustomerTypeofBussinesses.Find(CustomerTypeofBussinessID);
+            if (byid == null)
+            {
+                return null;
+            }
+            return admap.Map<CustomerTypeofBussinessDTO>(byid);
+        }
+
+        public bool Insert(CustomerTypeofBussinessDTO CustomerTypeofBussinessDTO)
+        {
+            var insertCus = addContext.CustomerTypeofBussinesses.Find((CustomerTypeofBussinessDTO.CustomerTypeofBussinessID));
+            if (insertCus == null)
+            {
+                addContext.CustomerTypeofBussinesses.Add(admap.Map<CustomerTypeofBussiness>((CustomerTypeofBussinessDTO)));
+                return true;
+            }
+            return false;
         }
 
         public void Save()
@@ -38,9 +60,15 @@ namespace ProjectAlta.Repository
             addContext.SaveChanges();
         }
 
-        public void Update(CustomerTypeofBussiness CustomerTypeofBussiness)
+        public bool Update(CustomerTypeofBussinessDTO CustomerTypeofBussinessDTO)
         {
-           addContext.Entry(CustomerTypeofBussiness).State = EntityState.Modified;
+            var updateCus = addContext.CustomerTypeofBussinesses.Find(CustomerTypeofBussinessDTO.CustomerTypeofBussinessID);
+            if (updateCus != null)
+            {
+                addContext.CustomerTypeofBussinesses.Update(admap.Map(CustomerTypeofBussinessDTO, updateCus));
+                return true;
+            }
+            return false;
         }
         private bool disposed = false;
 

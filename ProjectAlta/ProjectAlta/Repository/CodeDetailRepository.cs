@@ -65,7 +65,7 @@ namespace ProjectAlta.Repository
                 return false;
             }
             addContext.Remove(DeleteCode);
-            return true; ;
+            return true; 
         }
 
         public void Save()

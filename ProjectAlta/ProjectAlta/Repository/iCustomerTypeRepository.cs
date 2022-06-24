@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iCustomerTypeRepository
     {
-        IEnumerable<CustomerType> GetAll();
-        CustomerType GetById(int CustomerTypeID);
-        void Insert(CustomerType CustomerType);
-        void Update(CustomerType CustomerType);
-        void Delete(int CustomerTypeID);
+        List<CustomerPypeDTO> GetAll();
+        CustomerPypeDTO GetById(int CustomerTypeID);
+        bool Insert(CustomerPypeDTO CustomerTypeDTO);
+        bool Update(CustomerPypeDTO CustomerTypeDTO);
+        bool Delete(int CustomerTypeID);
         void Save();
     }
 }

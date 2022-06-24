@@ -1,14 +1,15 @@
-﻿using ProjectAlta.Entity;
+﻿using ProjectAlta.DTO;
+using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
     public interface iGiftsOfCampignRepository
     {
-        IEnumerable<GiftsOfCampign> GetAll();
-        GiftsOfCampign GetById(int GiftsOfCampignID);
-        void Insert(GiftsOfCampign GiftsOfCampign);
-        void Update(GiftsOfCampign GiftsOfCampign);
-        void Delete(int GiftsOfCampignID);
+        List<GiftsOfCampignDTO> GetAll();
+        GiftsOfCampignDTO GetById(int GiftsOfCampignID);
+        bool Insert(GiftsOfCampignDTO GiftsOfCampignDTO);
+        bool Update(GiftsOfCampignDTO GiftsOfCampignDTO);
+        bool Delete(int GiftsOfCampignID);
         void Save();
     }
 }
