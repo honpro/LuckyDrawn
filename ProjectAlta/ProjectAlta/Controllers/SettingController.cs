@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class SettingController : ControllerBase
     {
-        public readonly iSettingRepository iSettingRepository;
+        public readonly ISettingRepository iSettingRepository;
         private IMapper admap;
-        public SettingController(iSettingRepository addcon, IMapper mapper)
+        public SettingController(ISettingRepository addcon, IMapper mapper)
         {
             iSettingRepository = addcon;
             admap = mapper;

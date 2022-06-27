@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class ProgramSizeController : ControllerBase
     {
-        public readonly iProgramSizeRepository iProgramSizeRepository;
+        public readonly IProgramSizeRepository iProgramSizeRepository;
         private IMapper admap;
-        public ProgramSizeController(iProgramSizeRepository addcon, IMapper mapper)
+        public ProgramSizeController(IProgramSizeRepository addcon, IMapper mapper)
         {
             iProgramSizeRepository = addcon;
             admap = mapper;

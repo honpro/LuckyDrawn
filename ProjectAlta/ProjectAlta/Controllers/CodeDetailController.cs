@@ -12,11 +12,11 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class CodeDetailController : ControllerBase
     {
-        public readonly iCodeDetailRepository iCodeDetailRepository;
+        public readonly ICodeDetailRepository iCodeDetailRepository;
         private IMapper admap;
 
 
-        public CodeDetailController(iCodeDetailRepository addcon, IMapper mapper)
+        public CodeDetailController(ICodeDetailRepository addcon, IMapper mapper)
         {
             iCodeDetailRepository = addcon;
             admap = mapper;

@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
-    public interface iCharsetBarcodeRepository
+    public interface ICharsetBarcodeRepository
     {
         List <CharsetBarcodeDTO> GetAll();
         CharsetBarcodeDTO GetById(int CharsetBarcodeID);

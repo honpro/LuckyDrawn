@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iCustomerTypeRepository
+    public interface ICustomerTypeRepository
     {
         List<CustomerPypeDTO> GetAll();
         CustomerPypeDTO GetById(int CustomerTypeID);

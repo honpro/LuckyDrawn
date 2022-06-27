@@ -12,12 +12,12 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class CharsetBarcodeController : ControllerBase
     {
-        public readonly iCharsetBarcodeRepository iCharsetBarcodeRepository;
+        public readonly ICharsetBarcodeRepository iCharsetBarcodeRepository;
 
         private IMapper admap;
 
 
-        public CharsetBarcodeController(iCharsetBarcodeRepository addcon, IMapper mapper)
+        public CharsetBarcodeController(ICharsetBarcodeRepository addcon, IMapper mapper)
         {
             iCharsetBarcodeRepository = addcon;
             admap = mapper;

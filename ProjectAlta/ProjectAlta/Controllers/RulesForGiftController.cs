@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class RulesForGiftController : ControllerBase
     {
-        public readonly iRulesForGiftRepository iRulesForGiftRepository;
+        public readonly IRulesForGiftRepository iRulesForGiftRepository;
         private IMapper admap;
-        public RulesForGiftController(iRulesForGiftRepository addcon, IMapper mapper)
+        public RulesForGiftController(IRulesForGiftRepository addcon, IMapper mapper)
         {
             iRulesForGiftRepository = addcon;
             admap = mapper;

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
-    public class BarcodesRepository : iBarcodeRepository 
+    public class BarcodesRepository : IBarcodeRepository
     {
         private readonly AddContext  addContext;
         private readonly IMapper admap;

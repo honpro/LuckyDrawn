@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iCustomerTypeofBussinessRepository
+    public interface ICustomerTypeofBussinessRepository
     {
         List<CustomerTypeofBussinessDTO> GetAll();
         CustomerTypeofBussinessDTO GetById(int CustomerTypeofBussinessID);

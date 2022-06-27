@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iCodeDetailRepository
+    public interface ICodeDetailRepository
     {
         List<CodeDetailDTO> GetAll();
         CodeDetailDTO GetById(int CodeDetailID);

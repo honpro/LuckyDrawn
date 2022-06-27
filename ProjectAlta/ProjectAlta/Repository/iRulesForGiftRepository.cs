@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iRulesForGiftRepository
+    public interface IRulesForGiftRepository
     {
        List<RulesForGiftDTO> GetAll();
         RulesForGiftDTO GetById(int RulesForGiftID);

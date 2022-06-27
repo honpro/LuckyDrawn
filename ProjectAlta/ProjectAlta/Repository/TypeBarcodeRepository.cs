@@ -6,7 +6,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public class TypeBarcodeRepository : iTypeBarcodeRepository
+    public class TypeBarcodeRepository : ITypeBarcodeRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

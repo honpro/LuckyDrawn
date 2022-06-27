@@ -5,7 +5,7 @@ using ProjectAlta.DTO;
 
 namespace ProjectAlta.Repository
 {
-    public class TypeCodeRepository : iTypeCodeRepository
+    public class TypeCodeRepository : ITypeCodeRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

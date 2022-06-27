@@ -12,11 +12,11 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class CharsetTypeController : ControllerBase
     {
-        public readonly iCharsetTypeRepository iCharsetTypeRepository;
+        public readonly ICharsetTypeRepository iCharsetTypeRepository;
         private IMapper admap;
 
 
-        public CharsetTypeController(iCharsetTypeRepository addcon, IMapper mapper)
+        public CharsetTypeController(ICharsetTypeRepository addcon, IMapper mapper)
         {
             iCharsetTypeRepository = addcon;
             admap = mapper;

@@ -4,7 +4,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iTypeCodeRepository
+    public interface ITypeCodeRepository
     {
         List<TypeCodeDTO> GetAll();
         TypeCodeDTO GetById(int TypeCodeID);

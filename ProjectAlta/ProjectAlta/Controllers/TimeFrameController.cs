@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class TimeFrameController : ControllerBase
     {
-        public readonly iTimeFrameRepository iTimeFrameRepository;
+        public readonly ITimeFrameRepository iTimeFrameRepository;
         private IMapper admap;
-        public TimeFrameController(iTimeFrameRepository addcon, IMapper mapper)
+        public TimeFrameController(ITimeFrameRepository addcon, IMapper mapper)
         {
             iTimeFrameRepository = addcon;
             admap = mapper;

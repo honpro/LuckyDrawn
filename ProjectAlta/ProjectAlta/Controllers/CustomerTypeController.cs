@@ -12,11 +12,11 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class CustomerTypeController : ControllerBase
     {
-        public readonly iCustomerTypeRepository iCustomerTypeRepository;
+        public readonly ICustomerTypeRepository iCustomerTypeRepository;
         private IMapper admap;
 
 
-        public CustomerTypeController(iCustomerTypeRepository addcon, IMapper mapper)
+        public CustomerTypeController(ICustomerTypeRepository addcon, IMapper mapper)
         {
             iCustomerTypeRepository = addcon;
             admap = mapper;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
     
-    public interface iBarcodesUsageHistoryRepository
+    public interface IBarcodesUsageHistoryRepository
     {
         List<BarcodesUsageHistoryDTO> GetAll();
         BarcodesUsageHistoryDTO GetById(int BarcodesUsageHistoryID);

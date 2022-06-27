@@ -10,9 +10,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class TypeCodeController : ControllerBase
     {
-        public readonly iTypeCodeRepository iTypeCodeRepository;
+        public readonly ITypeCodeRepository iTypeCodeRepository;
         private IMapper admap;
-        public TypeCodeController(iTypeCodeRepository addcon, IMapper mapper)
+        public TypeCodeController(ITypeCodeRepository addcon, IMapper mapper)
         {
             iTypeCodeRepository = addcon;
             admap = mapper;

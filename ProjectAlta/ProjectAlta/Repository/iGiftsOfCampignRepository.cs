@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iGiftsOfCampignRepository
+    public interface IGiftsOfCampignRepository
     {
         List<GiftsOfCampignDTO> GetAll();
         GiftsOfCampignDTO GetById(int GiftsOfCampignID);

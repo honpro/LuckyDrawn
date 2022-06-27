@@ -12,11 +12,11 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class BarcodeController : ControllerBase
     {
-        public readonly iBarcodeRepository iBarcodeRepository;
+        public readonly IBarcodeRepository iBarcodeRepository;
         private IMapper admap;
        
         
-        public BarcodeController(iBarcodeRepository addcon, IMapper mapper)
+        public BarcodeController(IBarcodeRepository addcon, IMapper mapper)
         {
             iBarcodeRepository = addcon;
             admap = mapper;

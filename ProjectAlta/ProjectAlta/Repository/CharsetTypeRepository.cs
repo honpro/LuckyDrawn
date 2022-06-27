@@ -6,7 +6,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public class CharsetTypeRepository : iCharsetTypeRepository
+    public class CharsetTypeRepository : ICharsetTypeRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly iAccountRepository iAccountRepository;
+        private readonly IAccountRepository iAccountRepository;
         private IMapper admap;
-        public AccountController(iAccountRepository addcon, IMapper mapper)
+        public AccountController(IAccountRepository addcon, IMapper mapper)
         {
             iAccountRepository = addcon;
             admap = mapper;

@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iSettingRepository
+    public interface ISettingRepository
     {
         List<SettingDTO> GetAll();
         SettingDTO GetById(int SettingID);

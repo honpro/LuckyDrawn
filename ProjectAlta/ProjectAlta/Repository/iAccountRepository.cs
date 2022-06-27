@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
-    public interface iAccountRepository
+    public interface IAccountRepository
     {
         List<AccountDTO> GetAll();
         AccountDTO GetById(int AccountID);

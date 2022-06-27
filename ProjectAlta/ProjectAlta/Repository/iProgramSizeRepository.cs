@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iProgramSizeRepository
+    public interface IProgramSizeRepository
     {
         List<ProgramSizeDTO> GetAll();
         ProgramSizeDTO GetById(int ProgramSizeID);

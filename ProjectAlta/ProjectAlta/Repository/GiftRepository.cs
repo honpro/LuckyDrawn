@@ -6,7 +6,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public class GiftRepository : iGiftRepository
+    public class GiftRepository : IGiftRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

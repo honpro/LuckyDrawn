@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
-    public interface iCharsetTypeRepository
+    public interface ICharsetTypeRepository
     {
         List<CharsetTypeDTO> GetAll();
         CharsetTypeDTO GetById(int charsetTypeID);

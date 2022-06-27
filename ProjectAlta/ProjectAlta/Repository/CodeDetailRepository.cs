@@ -6,7 +6,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public class CodeDetailRepository : iCodeDetailRepository
+    public class CodeDetailRepository : ICodeDetailRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

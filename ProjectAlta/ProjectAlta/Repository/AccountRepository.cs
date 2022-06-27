@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectAlta.Repository
 {
-    public class AccountRepository : iAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly IMapper admap;
         private readonly AddContext addContext;

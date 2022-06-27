@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public interface iTimeFrameRepository
+    public interface ITimeFrameRepository
     {
         List<TimeFrameDTO> GetAll();
         TimeFrameDTO GetById(int TimeFrameID);

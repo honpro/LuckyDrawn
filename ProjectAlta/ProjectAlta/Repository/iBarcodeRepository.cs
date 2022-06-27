@@ -3,7 +3,7 @@ using ProjectAlta.Entity;
 using System.Collections.Generic;
 namespace ProjectAlta.Repository
 {
-    public interface iBarcodeRepository
+    public interface IBarcodeRepository
     {
         List<BarcodeDTO> GetAll();
         BarcodeDTO GetById(int BarcodeID);

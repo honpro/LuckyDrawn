@@ -6,7 +6,7 @@ using ProjectAlta.Entity;
 
 namespace ProjectAlta.Repository
 {
-    public class TimeFrameRepository : iTimeFrameRepository
+    public class TimeFrameRepository : ITimeFrameRepository
     {
         private readonly AddContext addContext;
         private readonly IMapper admap;

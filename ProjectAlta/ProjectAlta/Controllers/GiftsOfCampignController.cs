@@ -12,9 +12,9 @@ namespace ProjectAlta.Controllers
     [ApiController]
     public class GiftsOfCampignController : ControllerBase
     {
-        public readonly iGiftsOfCampignRepository iGiftsOfCampignRepository;
+        public readonly IGiftsOfCampignRepository iGiftsOfCampignRepository;
         private IMapper admap;
-        public GiftsOfCampignController(iGiftsOfCampignRepository addcon, IMapper mapper)
+        public GiftsOfCampignController(IGiftsOfCampignRepository addcon, IMapper mapper)
         {
             iGiftsOfCampignRepository= addcon;
             admap = mapper;
